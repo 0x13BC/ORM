@@ -1,0 +1,352 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr-FR" xml:lang="fr-FR">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+    <title>ORM :: Projet .Net </title>
+</head>
+<body onload="return initTOC()">
+
+<h1>ORM<br />
+<span class="subTitle">Projet .Net </span></h1>
+
+<p id="pTocToggleContainer" style="visibility: hidden;">[<a id="aTocToggle" href="#" onclick="return toggleTOC()">Afficher la table des matières</a>]</p>
+<div id="divTOC">
+</div>
+
+<h2 id="summary">I. Résumé</h2>
+
+<p>Vous allez réaliser un système de mapping relationnel objet.  Le principe est le suivant&nbsp;:</p>
+
+<ul>
+	<li>Convertir les données relationnelles en objets et inversement</li>
+	<li>Associer les noms de class avec les noms de table, et les noms de propriétés avec les noms de champs.</li>
+    <li>Permettre d'éxécuter les méthodes de requétage standard (select, update, insert, delete).</li>
+    <li>Travailler avec 3 bases de données différentes (SqlServer, MySQL, PostgreSql).</li>
+</ul>
+
+<h3 id="deadlines">I.0 Échéances du projet</h3>
+
+<ul>
+	<li>Vendredi 15 Décembre 2017</li>
+</ul>
+
+<h3 id="history">I.1. Historique de ce document</h3>
+
+<ol>
+    <li>31/10/2017 : Version 1</li>
+</ol>
+
+<h2 id="mandatory">II. Fonctionnalités obligatoires</h2>
+
+<p>Cette partie présente en détail les fonctionnalités que votre projet doit obligatoirement fournir.  Ces fonctionnalités sont suffisantes pour obtenir la note maximale (20/20).  Des développements supplémentaires sont mis en avant dans la prochaine partie, &laquo;&nbsp;<a href="#bonus">Fonctionnalités bonus</a>&nbsp;&raquo;.</p>
+
+<h3 id="basic-def">II.1. Mapping</h3>
+
+<p>Le mapping par défaut sera automatique. Vous devrez associer les noms de tables avec les nom de classes et les noms de champs avec les nom de propriétés.</p>
+
+<p>Par exemple La class Contact donnera accès à la table contact et la Propriété Nom donnera accès au champs nom</p>
+
+<p>Exemple: <br />
+<code>string req = "SELECT * FROM contact;";<br />
+    List&lsaquo;Contact&rsaquo; l = DboMapper.List(req);</code>
+    <br />
+L'exécution de ce code renvoie une List de Contact suite au retour de la requete.</p>
+
+<h3 id="liveness">II.2. Connection à plusieurs types de bases de données</h3>
+
+<p>
+
+
+</p>
+
+<p>Exemple: <br />
+<code>namespace Test.Class<br />
+    {<br />
+        public class TestDbModule : DboConnectionModule<br />
+        {    <br />
+            public override TypeSGBD GetDbType()<br />
+            {<br />
+                return TypeSGBD.MYSQL;<br />
+            }<br />
+            <br />
+            public override string GetConnectionString()<br />
+            {<br />
+                return "xxxxx";<br />
+            }<br />
+        }<br />
+    }</code>
+<br />
+Ce code permet d'ouvrir une connexion sur une base de données de type mysql. Cette connexion est ensuite utilisée pour toutes les demandes.</p>
+
+<h3 id="display">II.3. Requetes paramétrées</h3>
+
+<p>Votre système devra permettre l'éxecution des requêtes de modification de données (insert, update, delete), mais aussi des "select" avec des paramètres.</p>
+<p>Pour les requêtes avec des paramètres, la concatenation est INTERDITE. Vous devez utiliser les requetes paramétrées.</p>
+<p>
+    Exemple:<br />
+    <code>
+        string req = @"INSERT INTO contact (nom, prenom) VALUES (@nom, @prenom)";<br />
+List<DboParameter> p = new List<DboParameter>();<br />
+p.Add(new DboParameter("@nom", obj.Nom));<br />
+p.Add(new DboParameter("@prenom", obj.Prenom));<br />
+DboMapper.Execute(req, p);
+    </code>
+</p>
+<p>Ceci devra fonctionner pour les 3 types de bdd.</p>
+
+<h3 id="incidents">II.4. Remontée d'incidents</h3>
+
+<p>En cas d'érreur à l'éxécution d'une requête, les exceptions devront remontées avec un message explicite. La requête ne sera alors pas exécutée en base.</p>
+
+<h3 id="incidents">II.4. Documentation</h3>
+<p>Votre librairie devra être documentée, via la documentation de code.</p>
+
+<h2 id="bonus">III. Fonctionnalités bonus</h2>
+
+<p>Cette partie présente les fonctionnalités supplémentaires que votre projet peut fournir.  Toutefois, les <a href="#mandatory">fonctionnalités obligatoires</a> ont priorité.  Vous devez vous concentre sur les fonctionnalités obligatoires avant de commencer le développement des bonus.  Toutefois, connaître à l'avance les bonus potentiels peut vous aider à orienter votre conception afin de faciliter leur intégration ultérieure.  Donc, lisez&nbsp;!</p>
+
+<p>Elles sont classées par ordre décroissant d'intérêt au regard de la plate-forme, mais vous pouvez réaliser celles que vous voulez&#8230;</p>
+
+<h3 id="visual-def">III.1. Génération automatique de requetes</h3>
+
+<p>Au lieu d'écrire les requetes SQL pour l'INSERT ou l'UPDATE ou de DELETE, vous pouvez créer des méthodes que génère automatiquement la requête SQL en fonction de l'objet en argument.</p>
+<p>
+    Exemeple: <br />
+    <code>
+        Conctact c = new Contact();<br />
+        c.Nom = "Leponge";<br />
+        c.Prenom = "Bob";<br />
+        DboMapper.ExecuteInsert(c);<br />
+    </code>
+</p>
+
+<h3 id="extraction">III.2. Gestion des transactions</h3>
+
+<p>Vous pouvez donner la possibilité d'isoler des requêtes à l'utilisateur via la gestion des transaction.</p>
+
+<!--
+<p class="important">XXX</p>
+
+<p class="figure"><img src="figX-xxx.png" alt="Xxxx"/><br />
+Fig. X: Xxxx</p>
+
+<p class="footnote">X: xxx.</p>
+-->
+
+<h2 id="groups-req-grading">IV. Groupes, exigences techniques et notation</h2>
+
+<p>Cette section présente le mode de composition des groupes, le type de travail en équipe attendu, et l'impact d'un fonctionnement par groupe sur la notation.  Il fournit aussi les exigences et contraintes techniques auxquelles tous les projets doivent répondre.  Enfin, il présente le mécanisme de notation.</p>
+
+<h3 id="teamwork">IV.1. Groupes &amp; travail d'équipe</h3>
+
+<p>Ce projet est à développer en <strong>groupes de 4</strong>.</p>
+<p>Les rendus auront lieu le Vendredi 15 décembre 2017</p>
+
+<table>
+<thead>
+    <tr>
+        <th>Nom du groupe</th>
+        <th>Membres</th>
+    </tr>
+</thead>
+<tbody>
+  <tr><th colspan="3">B3</th></tr>
+
+	 <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>BERRANGER Thomas</li>
+                <li>GOBION Etienne</li>
+                <li>VALENTIN Mickael</li>
+                <li>SALHOTRA DASS Dinesh</li>
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>OUALLET Sébastien</li>
+                <li>LIN Olivier</li>
+                <li>DEROUICHE Mathieu</li>
+                <li>DZEMOVSKI Edwin</li>
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>LAPA Julien</li>
+                <li>FERREIRA Adrien</li>
+                <li>MIFSUD Julien</li>
+                <li>SOULE-ALI Moustanir</li>
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>DELBRUYERE Brian</li>
+                <li>GRANDEMANGE Karim</li>
+                <li>PASCAL Paul</li>
+                <li>KONLAMBIGUE Djouma</li>
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>GRUMEAU Diego</li>
+                <li>LAFENETRE Mehdi</li>
+                <li>QUEMENER Yohann</li>
+                <li>LOPEZ Raphael</li>
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>BEN ZAID Aslam</li>
+                <li>MOUGAMADOU Lattif</li>
+                <li>PREIRA Ambroise</li>
+                <li>COHEN Benjamin</li>
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>AYEB Nizar</li>
+                <li>M'MADI Houmaidy</li>
+                <li>DELABORDE Rémi</li>
+                <li></li>
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>UREN Can Serkan</li>
+                <li>NIJEAN Jordan</li>
+                <li>LEUNG Gabrielle</li>
+                <li>RAVELONANTOANDRO Teddy</li>
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>BOULAND Lucas</li>
+                <li>ARSAC Guillaume</li>
+                <li>BEZANCON Pierre</li>
+                <li>GBAHA Patrick</li>
+            </ul>
+        </td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <td>
+            <ul>
+                <li>BIKOK Raphaelle</li>
+                <li>BOLONGO Victoria</li>
+                <li>BROTHELANDE Maxime</li>
+                <li></li>
+            </ul>
+        </td>
+    </tr>
+    
+
+</tbody>
+</table>
+
+<p>Tous les groupes seront définis en cours, sous la supervision de l'enseignant.  Les groupes s'enregistrent avec un nom de groupe ainsi que les noms de leurs membres.</p>
+
+<p><strong>Toute inscription est définitive</strong>.  Les étudiants ne sont pas autorisés, par la suite, à changer de groupe.</p>
+
+<p>Au sein d'un groupe, les étudiants se répartiront les tâches pour le projet, de façon équitable.  Il est explicitement exigé que chaque membre consacre au moins <strong>50% de son travail à du développement technique</strong>. Du code de test est acceptable, tant qu'il ne constitue pas l'intégralité de la réalisation technique du membre du groupe.</p>
+
+
+<p>Les étudiants ne sont pas tenus de travailler exclusivement à l'école.  Ils sont autorisés, et même encouragés, à <strong>travailler de chez eux</strong>, ou depuis tout autre endroit à leur convenance.  Toutefois, il est interdit de travailler sur le lieu de stage, afin d'éviter toute interférence projet/stage.</p>
+
+<p>Les étudiants sont obligés à mettre en place un système de contrôle des sources de type Git ou équivalent, afin d'affecter et partager efficacement les fichiers de codes et autres composants numériques du projet (fichiers sources, descripteurs de déploiement, documents de recherche, cas d'utilisation, suites de tests, etc.). Le professeur aura accès à ce système.</p>
+
+<h3 id="tech-requirements">IV.2. Exigences techniques&nbsp;: assurez-vous de les respecter&nbsp;!</h3>
+
+<p>Cette section présente les exigences techniques pour votre rendu complet.  Tout manquement entraînera des pénalités.</p>
+
+<ul>
+    <li>
+        <h4>ORM</h4>
+        <ul>
+            <li>Vous devez faire votre librairie en C# .Net.</li>
+            <li>Écrivez un maximum (intelligent) de tests, notamment unitaires et fonctionnels.</li>
+            <li>La librairie doit pouvoir être utilisée facilement à partir d'une autres application .Net.</li>
+            <li>Exploitez au mieux ADO.Net</li>
+        </ul>
+    </li>
+    
+    <li>
+        <h4>Format de rendu</h4>
+        <ul>
+            <li>
+	    	<p>Les projets doivent faire l'objet d'un rendu électronique au plus tard&#8230;</p>
+		<ul>
+			<li>Le 15 décembre 2017</li>
+		</ul>
+	    </li>
+
+            <li>Les rendus doivent figurer sur <strong>un seul compte par groupe</strong>.</li>
+            <li>Le rendu s'effectu via un repos GIT ou SVN. L'adresse du rendu est envoyé par mail.<br />
+				Le mail de rendu est <tt>vincent.leclerc@ingesup.com</tt>.</li>
+            <li>
+                <p>Les fichiers rendus <strong>doivent</strong> contenir&nbsp;:</p>
+                <ul>
+                    <li>L'arborescence du projet, immédiatement exploitable après création d'une base de données.</li>
+                    <li>Un <tt>AUTHORS.TXT</tt> listant les membres du groupe (prénom, nom), à raison d'un par ligne.  Il liste ensuite les responsabilités effectives de chacun dans le groupe.</li>
+                </ul>
+				<p>Le sujet du mail doit contenir votre section ainsi que le nom du projet.</p>
+                <p>Les fichiers rendus peuvent aussi comprendre&nbsp;:</p>
+                <ul>
+                    <li>Des documents de recherche créés pour le projet et fournissant plus de détails pour l'enseignant.</li>
+                </ul>
+                <p>Pour tout autre type de fichier, veuillez demander à l'enseignant si son inclusion est appropriée.</p>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<h3 id="grading-mechanism">IV.3. Modalités de notation</h3>
+
+<p>La notation du projet sera gérée comme suit&nbsp;:</p>
+
+<ol>
+    <li>
+        <p>La librairie ne doit pas avoir d'erreur à la compilation.</p>
+        <p>Elle doit fournir les fonctionnalitées obligatoires.</p>
+        <p>Le Git ou SVN devra montré le travail et l'implication de chacun.</p>
+
+        <p>Note&nbsp;: tout retard à la soutenance entraînera des pénalités sur la notation.</p>
+    </li>
+</ol>
+
+
+<p id="footer">&copy; 2017 VINCENT LECLERC - INGESUP.  Toute mise à jour du sujet sera annoncée.</p>
+</body>
+</html>
