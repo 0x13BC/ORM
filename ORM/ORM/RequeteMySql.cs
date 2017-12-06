@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace ORM
 {
-    public class Class1
+    class RequeteMySql
     {
+        
+        public RequeteMySql()
+        {
+            select
+        }
     }
 }
