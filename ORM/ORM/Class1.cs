@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ORM
 {
-    public class Class1
+    public class Test
     {
         public void test()
         {

@@ -12,8 +12,8 @@ namespace ORM
         private SqlConnection coSqlSer;
         public SqlDataReader dtRdSql;
         private SqlCommand cmd;
-        public string requete;
-        private string urlCon;
+        public string requete="Null";
+        private string urlCon="Null";
 
         public void connectionSqlServ()
         {
