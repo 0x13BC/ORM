@@ -1,13 +1,18 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ConsoleAppBach3
+namespace ORM
 {
-    class Program
+    public class MyORM
     {
-        
-
-        static void Main(string[] args)
+        public MyORM ()
+        {
+            
+        }
+        public void Home()
         {
 
             while (true)
@@ -39,19 +44,20 @@ namespace ConsoleAppBach3
 
         private static void SQLServer()
         {
-            
+            MServerSql SQLServ= new MServerSql();
+
         }
 
 
 
         private static void MySQL()
         {
-            
+
         }
 
         private static void PostGreSQL()
         {
-            
+
         }
 
         private static void afficherMenu()

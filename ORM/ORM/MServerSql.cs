@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace ORM
 {
-    class MServerSql
+    public class MServerSql
     {
         private SqlConnection coSqlSer;
         public SqlDataReader dtRdSql;

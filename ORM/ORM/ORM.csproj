@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Catalog.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="MyORM.cs" />
     <Compile Include="MServerSql.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
