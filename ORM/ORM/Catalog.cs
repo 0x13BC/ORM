@@ -15,9 +15,9 @@ namespace ORM
         public  Catalog(int _typeBdd ,string _urlBdd) : base(_urlBdd) { }
         public Catalog() : base("NULL") { }
 
-        public string urlBdd { get; set; } = "NULL";
-        private int typeBdd { get; set; }
-        public Table<Contact> contact;
+        public string UrlBdd { get; set; } = "NULL";
+        public int TypeBdd { get; set; }
+        public Table<Contact> Contacts;
 
     }
 }

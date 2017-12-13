@@ -13,11 +13,11 @@ namespace Test
         {
             Contact essai = new Contact(100, "Jaja", "JOJO", "monmail@france.fr", "12 de saint terbancle", new DateTime(2001, 12, 10));
             Console.WriteLine(essai.ToString());
-            Console.ReadKey();
-            MyORM orm= new MyORM();
+            
+            DboConnectionModule orm= new DboConnectionModule();
             orm.Home();
-           
 
+            Console.ReadKey();
         }
     }
 }

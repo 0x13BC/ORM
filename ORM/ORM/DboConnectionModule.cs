@@ -6,9 +6,18 @@ using System.Threading.Tasks;
 
 namespace ORM
 {
-    public class MyORM
+    public class DboConnectionModule
     {
-        public MyORM ()
+
+       private TypeSGBD DBused;
+        private string ConnectionString;
+
+       virtual public TypeSGBD GetDbType()
+        {
+            return DBused;
+        }
+
+        public DboConnectionModule ()
         {
             
         }
@@ -45,6 +54,9 @@ namespace ORM
         private static void SQLServer()
         {
             MServerSql SQLServ= new MServerSql();
+            SQLServ.CreateUrl();
+            SQLServ.connectionSqlServ();
+            SQLServ.Disconnect();
 
         }
 
@@ -67,6 +79,10 @@ namespace ORM
             Console.WriteLine("2- MySQL");
             Console.WriteLine("3- PostGreSQL");
             Console.WriteLine("Q- Quitter");
+        }
+        virtual public string GetConnectionString()
+        {
+            return ConnectionString;
         }
     }
 }
