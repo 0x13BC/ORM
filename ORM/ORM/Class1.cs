@@ -8,5 +8,9 @@ namespace ORM
 {
     public class Class1
     {
+        public void test()
+        {
+
+        }
     }
 }
