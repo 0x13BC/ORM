@@ -12,20 +12,32 @@ namespace ORM
 {
     public class ConnectionMySQL
     {
+        
         private MySqlConnection connection;
        
         // Constructeur
-        public ConnectionMySQL()
+        public ConnectionMySQL(string connectionString)
         {
-            this.InitConnexion();
+            // Création de la chaîne de connexion
+            connectionString  = "SERVER=127.0.0.1; DATABASE=mli; UID=root; PASSWORD=";
+            this.connection = new MySqlConnection(connectionString);
         }
 
         // Méthode pour initialiser la connexion
-        private void InitConnexion()
+        private Boolean InitConnexion()
         {
-            // Création de la chaîne de connexion
-            string connectionString = "SERVER=127.0.0.1; DATABASE=mli; UID=root; PASSWORD=";
-            this.connection = new MySqlConnection(connectionString);
+            try
+            {
+                if(connection.State == ConnectionState.Closed)
+                {
+
+                }
+
+            }
+            catch {
+
+            }
+            return false;
         }
         
     }

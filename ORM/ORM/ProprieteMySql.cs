@@ -9,12 +9,12 @@ using System.IO;
 
 namespace ORM
 {
-    class ProprieteMySql
+    public class ProprieteMySql
     {
-        private string nom ;
-        private string type;
-        private bool isNullable;
-        private bool isPrimaryKey;
+        public string nom ;
+        public string type;
+        public bool isNullable;
+        public bool isPrimaryKey;
         
     }
 }

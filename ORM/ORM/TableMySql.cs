@@ -22,13 +22,21 @@ namespace ORM
             this.nomtable = nom;
             this.table = latable;
             formatageXml();
-            creationObject();
+            
         }
         private void formatageXml()
         {
-            lefichier = $"<{nomtable}>";
-
-            lefichier += $"<{nomtable}>";
+            lefichier = $"<table nom={nomtable}>";
+            foreach(ProprieteMySql pro in table)
+            {
+                lefichier += $"<propriete>";
+                lefichier += $"<nom>{pro.nom}<nom>";
+                lefichier += $"<type>{pro.type}<type>";
+                lefichier += $"<null>{pro.isNullable}<null>";
+                lefichier += $"<primary>{pro.isPrimaryKey}<primary>";
+                lefichier += $"<propriete>";
+            }
+            lefichier += $"<table>";
             
         }
         public void creationObject()
@@ -39,5 +47,7 @@ namespace ORM
                 sw.WriteLine(lefichier);
             }
         }
+
+        
     }
 }
