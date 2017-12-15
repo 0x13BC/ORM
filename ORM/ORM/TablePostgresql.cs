@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Npgsql;
 using System.IO;
+using System.Configuration;
 
 namespace ORM
 {
@@ -21,7 +22,7 @@ namespace ORM
             this.nomtable = nom;
             this.table = latable;
             formatageXml();
-            //creationObject();
+           
         }
         private void formatageXml()
         {
@@ -38,14 +39,14 @@ namespace ORM
             lefichier += $"<table>";
 
         }
-       /* public void creationObject()
+        public void creationObject()
         {
             string nomFichier = ConfigurationManager.AppSettings["FICHIER"];
             using (StreamWriter sw = new StreamWriter(nomFichier, true, Encoding.UTF8))
             {
                 sw.WriteLine(lefichier);
             }
-        }*/
+        }
 
     }
 }

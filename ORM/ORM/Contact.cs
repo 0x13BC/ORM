@@ -1,59 +1,80 @@
 ﻿using System;
-using System.Data.Linq;
-using System.Data.Linq.Mapping;
+using System.Collections.Generic;
+using System.Linq;
+using System.Data;
+using System.Text;
+using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 namespace ORM
 {
-    [Table (Name="Contacts")]
-    public class Contact : IComparable<Contact>
-    {
-        [Column(IsPrimaryKey = true, IsDbGenerated = true)]
-        private int id
+
+        [Table(Name = "Contacts")]
+        public class Contact : IComparable<Contact>
         {
-            get { return id; }
-            set
+
+            public Contact(int id, string name, string firstname, string mail, string adress, DateTime dateofbirth)
             {
-                if (id > 0 && id < 99999) id = value;
-                else;//TODO Exception to do later
+                this.Id = id;
+                this.Name = name;
+                this.FirstName = firstname;
+                this.Mail = mail;
+                this.Address = adress;
+                this.DateOfBirth = dateofbirth;
+            }
+
+            private int _id;
+
+            [Column(IsPrimaryKey = true, IsDbGenerated = true)]
+            public int Id
+            {
+                get { return _id; }
+                set
+                {
+                    if (value > 0 && value < 99999) _id = value;
+                    else { };//TODO Exception to do later
+                }
+            }
+            private string _name;
+            [Column]
+            public string Name
+            {
+                get { return _name; }
+                set { _name = value.ToUpper(); }
+            }
+
+            [Column]
+            public string FirstName;
+
+            private string _mail;
+            [Column]
+            public string Mail
+            {
+                get { return _mail; }
+                set
+                {
+                    Regex regMail = new Regex(@"^[a-zA-Z0-9.-_]+@{1,1}[a-zA-Z0-9.-_]{2,}\.[a-zA-Z0-9.]{2,6}$");
+                    if (regMail.IsMatch(value)) _mail = value;
+                    else { } //TODO THROW A EXCEPTION LATER
+                }
+            }
+
+            [Column]
+            public string Address { get; set; }
+
+            [Column]
+            public DateTime DateOfBirth { get; set; }
+
+
+            public int CompareTo(Contact other)
+            {
+                return Id.CompareTo(other.Id) != 0 ? this.Id.CompareTo(other.Id) : this.Name.CompareTo(other.Name);
+            }
+
+            public override string ToString()
+            {
+                return $"{this.Id} {this.Name} {this.FirstName} {this.Mail} {this.Address} {this.DateOfBirth.ToString("dd/MM/yyyy")}";
             }
         }
-        [Column]
-        private string name
-        {
-            get { return name; }
-            set { name = value.ToUpper(); }
-        }
-        [Column]
-        private string firstName;
-
-        [Column]
-        private string mail
-        {
-            get { return mail; }
-            set
-            {
-                Regex regMail = new Regex(@"^[a-zA-Z0-9.-_]+@{1,1}[a-zA-Z0-9.-_]{2,}\.[a-zA-Z0-9.]{2,6}$");
-                if (regMail.IsMatch(value)) mail = value;
-                else; //TODO THROW A EXCEPTION LATER
-            }
-        }
-
-        [Column]
-        private string address;
-
-        [Column]
-        private DateTime dateOfBirth;
-
-
-        public int CompareTo(Contact other)
-        {
-            return this.id.CompareTo(other.id) != 0 ? this.id.CompareTo(other.id) : this.name.CompareTo(other.name);
-        }
-
-        public override string ToString()
-        {
-            return $"{this.id} {this.name} {this.firstName} {this.mail} {this.address} {this.dateOfBirth.ToString("dd/MM/yyyy")}";
-        }
-    }
+    
 }
